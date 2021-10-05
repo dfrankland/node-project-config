@@ -1,7 +1,9 @@
 import type { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
+  testEnvironment: 'jest-environment-jsdom',
   setupFilesAfterEnv: ['./setupTest.ts'],
+  testPathIgnorePatterns: ['/cypress/'],
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*',
@@ -17,7 +19,6 @@ const config: Config.InitialOptions = {
       lines: 80,
     },
   },
-  testEnvironment: 'jest-environment-jsdom',
   coverageDirectory: './coverage/jest',
   reporters: [
     'default',

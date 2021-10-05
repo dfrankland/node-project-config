@@ -11,67 +11,142 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+      - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - run: npm ci
+      - uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            ~/.cache/Cypress
+          key: ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-
   build:
     needs: setup
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
       - run: npm run build
   lint:
     needs: setup
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
       - run: npm run lint
   typecheck:
     needs: setup
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
       - run: npm run typecheck
   test-unit:
     needs: setup
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
       - run: npm run test:unit
   test-integration:
     needs: setup
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            ~/.cache/Cypress
+          key: ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
       - run: npm run test:integration
   commitlint:
     needs: setup
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
-      - run: npm run commitlint -- -f ${{ pull_request_target }}
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm run commitlint -- -f ${{ env.GITHUB_BASE_REF == '' && 'main' || env.GITHUB_BASE_REF }}
