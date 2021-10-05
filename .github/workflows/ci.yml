@@ -25,9 +25,9 @@ jobs:
           path: |
             node_modules
             ~/.cache/Cypress
-          key: ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-${{ hashFiles('package-lock.json') }}
+          key: ${{ github.run_id }}-${{ github.run_number }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-
+            ${{ github.run_id }}-${{ github.run_number }}-node-
   build:
     needs: setup
     runs-on: ubuntu-latest
@@ -40,9 +40,9 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: node_modules
-          key: ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-${{ hashFiles('package-lock.json') }}
+          key: ${{ github.run_id }}-${{ github.run_number }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-
+            ${{ github.run_id }}-${{ github.run_number }}-node-
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
@@ -60,9 +60,9 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: node_modules
-          key: ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-${{ hashFiles('package-lock.json') }}
+          key: ${{ github.run_id }}-${{ github.run_number }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-
+            ${{ github.run_id }}-${{ github.run_number }}-node-
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
@@ -80,9 +80,9 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: node_modules
-          key: ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-${{ hashFiles('package-lock.json') }}
+          key: ${{ github.run_id }}-${{ github.run_number }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-
+            ${{ github.run_id }}-${{ github.run_number }}-node-
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
@@ -100,9 +100,9 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: node_modules
-          key: ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-${{ hashFiles('package-lock.json') }}
+          key: ${{ github.run_id }}-${{ github.run_number }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-
+            ${{ github.run_id }}-${{ github.run_number }}-node-
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
@@ -122,9 +122,9 @@ jobs:
           path: |
             node_modules
             ~/.cache/Cypress
-          key: ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-${{ hashFiles('package-lock.json') }}
+          key: ${{ github.run_id }}-${{ github.run_number }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-
+            ${{ github.run_id }}-${{ github.run_number }}-node-
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
@@ -142,9 +142,9 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: node_modules
-          key: ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-${{ hashFiles('package-lock.json') }}
+          key: ${{ github.run_id }}-${{ github.run_number }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-
+            ${{ github.run_id }}-${{ github.run_number }}-node-
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
