@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "isolatedModules": false
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    "coverage"
+  ],
+  "include": [
+    "setupTest.ts",
+    "setupTest-env.d.ts",
+    "**/__tests__/**/*",
+    "**/__mocks__/**/*",
+    "**/*.ts",
+    "**/*.tsx"
+  ]
+}
