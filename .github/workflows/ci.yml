@@ -149,4 +149,4 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - run: npm run commitlint -- -f ${{ env.GITHUB_BASE_REF == '' && 'main' || env.GITHUB_BASE_REF }}
+      - run: npm run commitlint -- -f ${{ github.base_ref == '' && github.ref || github.base_ref }}
