@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: npm ci
-      - run: tar -cvzf workspace.tar.gz ${{ github.workspace }}
+      - run: tar -cvzf workspace.tar.gz -C ${{ github.workspace }}
         working-directory: ${{ runner.temp }}
       - uses: actions/upload-artifact@v2
         with:
