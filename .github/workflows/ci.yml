@@ -9,144 +9,99 @@ on:
 jobs:
   setup:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    container:
+      image: node:latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
       - run: npm ci
-      - uses: actions/cache@v2
+      - run: tar -cvzf workspace.tar.gz -C ${{ github.workspace }}
+        working-directory: ${{ runner.temp }}
+      - uses: actions/upload-artifact@v2
         with:
+          name: workspace
           path: |
-            node_modules
-            ~/.cache/Cypress
-          key: ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-
+            ${{ runner.temp }}/workspace.tar.gz
   build:
     needs: setup
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    container:
+      image: node:latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
+      - uses: actions/download-artifact@v2
         with:
-          path: node_modules
-          key: ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          name: workspace
+          path: |
+            ${{ runner.temp }}/workspace.tar.gz
+      - run: tar -xvf ${{ runner.temp }}/workspace.tar.gz
+      - run: ls -la
       - run: npm run build
   lint:
     needs: setup
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    container:
+      image: node:latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
+      - uses: actions/download-artifact@v2
         with:
-          path: node_modules
-          key: ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          name: workspace
+          path: |
+            ${{ runner.temp }}/workspace.tar.gz
+      - run: tar -xvf ${{ runner.temp }}/workspace.tar.gz
+      - run: ls -la
       - run: npm run lint
   typecheck:
     needs: setup
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    container:
+      image: node:latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
+      - uses: actions/download-artifact@v2
         with:
-          path: node_modules
-          key: ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          name: workspace
+          path: |
+            ${{ runner.temp }}/workspace.tar.gz
+      - run: tar -xvf ${{ runner.temp }}/workspace.tar.gz
+      - run: ls -la
       - run: npm run typecheck
   test-unit:
     needs: setup
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    container:
+      image: node:latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
+      - uses: actions/download-artifact@v2
         with:
-          path: node_modules
-          key: ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          name: workspace
+          path: |
+            ${{ runner.temp }}/workspace.tar.gz
+      - run: tar -xvf ${{ runner.temp }}/workspace.tar.gz
+      - run: ls -la
       - run: npm run test:unit
   test-integration:
     needs: setup
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    container:
+      image: node:latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
+      - uses: actions/download-artifact@v2
         with:
+          name: workspace
           path: |
-            node_modules
-            ~/.cache/Cypress
-          key: ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+            ${{ runner.temp }}/workspace.tar.gz
+      - run: tar -xvf ${{ runner.temp }}/workspace.tar.gz
+      - run: ls -la
       - run: npm run test:integration
   commitlint:
     needs: setup
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    container:
+      image: node:latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
+      - uses: actions/download-artifact@v2
         with:
-          path: node_modules
-          key: ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}-node-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      - run: npm run commitlint -- -f ${{ env.GITHUB_BASE_REF == '' && 'main' || env.GITHUB_BASE_REF }}
+          name: workspace
+          path: |
+            ${{ runner.temp }}/workspace.tar.gz
+      - run: tar -xvf ${{ runner.temp }}/workspace.tar.gz
+      - run: ls -la
+      - run: npm run commitlint -- -f ${{ github.base_ref == '' && github.ref || github.base_ref }}
