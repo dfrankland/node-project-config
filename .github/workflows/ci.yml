@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: npm ci
       - run: mkdir -p ${{ runner.temp }}
-      - run: tar -czf ${{ runner.temp }}/workspace.tar.gz .
+      - run: tar -cvzf ${{ runner.temp }}/workspace.tar.gz .
       - uses: actions/upload-artifact@v2
         with:
           name: workspace
@@ -27,6 +27,12 @@ jobs:
     container:
       image: node:latest
     steps:
+      - uses: actions/upload-artifact@v2
+        with:
+          name: workspace
+          path: |
+            ${{ runner.temp }}/workspace.tar.gz
+      - run: tar -xvf ${{ runner.temp }}/workspace.tar.gz
       - run: ls -la
       - run: npm run build
   lint:
@@ -35,6 +41,12 @@ jobs:
     container:
       image: node:latest
     steps:
+      - uses: actions/upload-artifact@v2
+        with:
+          name: workspace
+          path: |
+            ${{ runner.temp }}/workspace.tar.gz
+      - run: tar -xvf ${{ runner.temp }}/workspace.tar.gz
       - run: ls -la
       - run: npm run lint
   typecheck:
@@ -43,6 +55,12 @@ jobs:
     container:
       image: node:latest
     steps:
+      - uses: actions/upload-artifact@v2
+        with:
+          name: workspace
+          path: |
+            ${{ runner.temp }}/workspace.tar.gz
+      - run: tar -xvf ${{ runner.temp }}/workspace.tar.gz
       - run: ls -la
       - run: npm run typecheck
   test-unit:
@@ -51,6 +69,12 @@ jobs:
     container:
       image: node:latest
     steps:
+      - uses: actions/upload-artifact@v2
+        with:
+          name: workspace
+          path: |
+            ${{ runner.temp }}/workspace.tar.gz
+      - run: tar -xvf ${{ runner.temp }}/workspace.tar.gz
       - run: ls -la
       - run: npm run test:unit
   test-integration:
@@ -59,6 +83,12 @@ jobs:
     container:
       image: node:latest
     steps:
+      - uses: actions/upload-artifact@v2
+        with:
+          name: workspace
+          path: |
+            ${{ runner.temp }}/workspace.tar.gz
+      - run: tar -xvf ${{ runner.temp }}/workspace.tar.gz
       - run: ls -la
       - run: npm run test:integration
   commitlint:
@@ -67,5 +97,11 @@ jobs:
     container:
       image: node:latest
     steps:
+      - uses: actions/upload-artifact@v2
+        with:
+          name: workspace
+          path: |
+            ${{ runner.temp }}/workspace.tar.gz
+      - run: tar -xvf ${{ runner.temp }}/workspace.tar.gz
       - run: ls -la
       - run: npm run commitlint -- -f ${{ github.base_ref == '' && github.ref || github.base_ref }}
