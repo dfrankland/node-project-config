@@ -9,144 +9,62 @@ on:
 jobs:
   setup:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    container:
+      image: node:latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
       - run: npm ci
-      - uses: actions/cache@v2
+      - run: tar -czf ${{ runner.temp }}/workspace.tar.gz .
+      - uses: actions/upload-artifact@v2
         with:
+          name: workspace
           path: |
-            node_modules
-            ~/.cache/Cypress
-          key: ${{ github.run_id }}-${{ github.run_number }}-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ github.run_id }}-${{ github.run_number }}-node-
+            ${{ runner.temp }}/workspace.tar.gz
   build:
     needs: setup
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    container:
+      image: node:latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ github.run_id }}-${{ github.run_number }}-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ github.run_id }}-${{ github.run_number }}-node-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+      - run: ls -la
       - run: npm run build
   lint:
     needs: setup
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    container:
+      image: node:latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ github.run_id }}-${{ github.run_number }}-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ github.run_id }}-${{ github.run_number }}-node-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+      - run: ls -la
       - run: npm run lint
   typecheck:
     needs: setup
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    container:
+      image: node:latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ github.run_id }}-${{ github.run_number }}-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ github.run_id }}-${{ github.run_number }}-node-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+      - run: ls -la
       - run: npm run typecheck
   test-unit:
     needs: setup
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    container:
+      image: node:latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ github.run_id }}-${{ github.run_number }}-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ github.run_id }}-${{ github.run_number }}-node-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+      - run: ls -la
       - run: npm run test:unit
   test-integration:
     needs: setup
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    container:
+      image: node:latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        with:
-          path: |
-            node_modules
-            ~/.cache/Cypress
-          key: ${{ github.run_id }}-${{ github.run_number }}-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ github.run_id }}-${{ github.run_number }}-node-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+      - run: ls -la
       - run: npm run test:integration
   commitlint:
     needs: setup
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    container:
+      image: node:latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ github.run_id }}-${{ github.run_number }}-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ github.run_id }}-${{ github.run_number }}-node-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+      - run: ls -la
       - run: npm run commitlint -- -f ${{ github.base_ref == '' && github.ref || github.base_ref }}
